@@ -187,18 +187,19 @@ class Transaksi extends CI_Controller {
 				'pay_code' => $data->pay_code,
 				'status' => $data->status,
 				'expired_time' => $data->expired_time,
-				'data_tripay' => $response
+				'data_tripay' => $response,
+				'create_at' => date('Y-m-d H:i:s'),
+				'update_at' => date('Y-m-d H:i:s')
 			);
 
 			$barang_array_database = [];
 			foreach ($barang_database as $a) {
 				$array = $a;
 				$array['reference_transaksi'] = $data->reference;
+				$array['create_at'] = date('Y-m-d H:i:s');
+				$array['update_at'] = date('Y-m-d H:i:s');
 				array_push($barang_array_database, $array);
 			}
-			echo "<pre>";
-			print_r($barang_array_database);
-			echo "</pre>";
 
 			$this->M_admin->insert_data('transaksi', $data_database);
 

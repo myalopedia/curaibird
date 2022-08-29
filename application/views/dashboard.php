@@ -20,16 +20,16 @@
                                         <h2 class="fs-36 text-white mb-sm-4 mb-3">Rp. <?php echo number_format($transaksi['total_transaksi']); ?></h2>
                                         <div class="d-flex align-items-center justify-content-between mb-sm-5 mb-3">
                                             <img src="images/dual-dot.png" alt="" class="dot-img">
-                                            <h4 class="fs-20 text-white mb-0"><?php echo $transaksi_terakhir['reference']; ?></h4>
+                                            <h4 class="fs-20 text-white mb-0"><?php echo $transaksi_terakhir != null ? $transaksi_terakhir['reference'] : '-'; ?></h4>
                                         </div>
                                         <div class="d-flex">
                                             <div class="mr-5">
                                                 <p class="fs-14 mb-1 op6">Terakhir Transaksi Sukses</p>
-                                                <span><?php echo date('d/m/Y', strtotime($transaksi_terakhir['create_at'])); ?></span>
+                                                <span><?php echo $transaksi_terakhir != null ? date('d/m/Y', strtotime($transaksi_terakhir['create_at'])) : '-'; ?></span>
                                             </div>
                                             <div>
                                                 <p class="fs-14 mb-1 op6">Nama</p>
-                                                <span><?php echo $transaksi_terakhir['customer_name']; ?></span>
+                                                <span><?php echo $transaksi_terakhir != null ? $transaksi_terakhir['customer_name'] : '-'; ?></span>
                                             </div>
                                         </div>
                                     </div>
