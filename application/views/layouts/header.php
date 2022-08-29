@@ -136,8 +136,8 @@
                             <li class="nav-item dropdown header-profile">
                                 <a class="nav-link" href="javascript:void(0)" role="button" data-toggle="dropdown">
 									<div class="header-info">
-										<span class="text-black">Hello,<strong>Admin</strong></span>
-										<p class="fs-12 mb-0">Super Admin</p>
+										<span class="text-black">Hello, <strong><?php echo $this->session->userdata('nama'); ?></strong></span>
+										<p class="fs-12 mb-0"><?php echo $this->session->userdata('level'); ?></p>
 									</div>
                                     <img src="<?php echo base_url(); ?>assets/images/profile/17.jpg" width="20" alt=""/>
                                 </a>

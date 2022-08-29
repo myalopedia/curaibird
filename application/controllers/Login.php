@@ -49,12 +49,12 @@ class Login extends CI_Controller {
                 redirect(base_url('dashboard'));
             } else {
                 $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Password salah!</div>');
+                redirect(base_url('login'));
             }
 		} else {
 			$this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">User tidak terdaftar!</div>');
+			redirect(base_url('login'));
 		}
-
-		// redirect('admin/login');
     }
     function logout()
 	{
