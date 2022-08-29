@@ -2,10 +2,10 @@
     // SAMPLE HIT API iPaymu v2 PHP //
     class Tripay{
         function __construct() {
-            $this->privateKey = 'brOMJ-bv59X-D8qQS-ElSXI-uuCIy';
-            $this->merchantCode = 'T4512';
+            $this->privateKey = '313QI-jiKmY-azHzv-H3m9s-b4B5P';
+            $this->merchantCode = 'T15013';
             $this->merchantRef = 'INV55567';
-            $this->apiKey = "DEV-hMXDCNzSgQUddsLRJS3bVNQqAJXs7s96yR1FhpRj";
+            $this->apiKey = "DEV-p1JFXh6PpPeQEXMh2ycoo0iWpTwGmD5y49c2FH5e";
         }
 
         function make_signature($amount)

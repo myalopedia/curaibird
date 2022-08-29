@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="csrf-token" content="EOMOCH8vxOZzEqRP2lSDYxwPwPcTHC6uZxKKPQ9t">
-    <title>Mophy | Dashboard</title>
+    <title>Curaibird | Dashboard</title>
 	
 	<meta name="description" content="Some description for the page"/>
     <!-- Favicon icon -->
