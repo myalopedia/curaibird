@@ -170,7 +170,7 @@ class Transaksi extends CI_Controller {
 		$error = curl_error($curl);
 
 		curl_close($curl);
-		print_r($response);
+		// print_r($response);
 		if(empty($error)) {
 			$decode_response = json_decode($response);
 			$data = $decode_response->data;
@@ -204,6 +204,8 @@ class Transaksi extends CI_Controller {
 			$this->M_admin->insert_data('transaksi', $data_database);
 
 			$this->M_admin->insertBatch('produk_transaksi', $barang_array_database);
+
+			redirect(base_url('transaksi'));
 		}
 		else {
 			$error;
