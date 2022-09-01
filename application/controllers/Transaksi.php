@@ -40,6 +40,10 @@ class Transaksi extends CI_Controller {
 		$daftar_metode = $this->tripay->get_daftar_metode(false);
 		$data['daftar_metode'] = json_decode($daftar_metode)->data;
 
+		echo "<pre>";
+		print_r($daftar_metode);
+		echo "<pre>";
+
 		$footer = array('page' => 'tambah_transaksi');
         $this->load->view('layouts/header');
         $this->load->view('transaksi_tambah', $data);
