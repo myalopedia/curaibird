@@ -2,10 +2,10 @@
     // SAMPLE HIT API iPaymu v2 PHP //
     class Tripay{
         function __construct() {
-            $this->privateKey = '313QI-jiKmY-azHzv-H3m9s-b4B5P';
-            $this->merchantCode = 'T15013';
+            $this->privateKey = 'DWe6I-Frem3-8XZMW-BbcZh-o0zlt';
+            $this->merchantCode = 'T15034';
             $this->merchantRef = 'INV55567';
-            $this->apiKey = "DEV-p1JFXh6PpPeQEXMh2ycoo0iWpTwGmD5y49c2FH5e";
+            $this->apiKey = "8x6Q4J8UE75fU72unbPanZg6uQZf9rFheIFLZ8dU";
         }
 
         function make_signature($amount)
@@ -22,10 +22,10 @@
             if($select) {
                 // $payload = ['code' => 'BRIVA'];
                 $payload = $select;
-                $url = 'https://tripay.co.id/api-sandbox/merchant/payment-channel?'.http_build_query($payload);
+                $url = 'https://tripay.co.id/api/merchant/payment-channel?'.http_build_query($payload);
             }
             else {
-                $url = 'https://tripay.co.id/api-sandbox/merchant/payment-channel';
+                $url = 'https://tripay.co.id/api/merchant/payment-channel';
             }
 
             $curl = curl_init();
@@ -60,7 +60,7 @@
 
             curl_setopt_array($curl, [
                 CURLOPT_FRESH_CONNECT  => true,
-                CURLOPT_URL            => 'https://tripay.co.id/api-sandbox/merchant/fee-calculator?'.http_build_query($payload),
+                CURLOPT_URL            => 'https://tripay.co.id/api/merchant/fee-calculator?'.http_build_query($payload),
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_HEADER         => false,
                 CURLOPT_HTTPHEADER     => ['Authorization: Bearer '.$apiKey],
@@ -99,7 +99,7 @@
 
             curl_setopt_array($curl, [
                 CURLOPT_FRESH_CONNECT  => true,
-                CURLOPT_URL            => 'https://tripay.co.id/api-sandbox/transaction/detail?'.http_build_query($payload),
+                CURLOPT_URL            => 'https://tripay.co.id/api/transaction/detail?'.http_build_query($payload),
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_HEADER         => false,
                 CURLOPT_HTTPHEADER     => ['Authorization: Bearer '.$apiKey],
