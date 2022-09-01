@@ -29,9 +29,9 @@ class Dashboard extends CI_Controller {
     }
 	public function index()
 	{
-		$data['transaksi'] = $this->M_admin->select_query('SELECT sum(amount_received) as total_transaksi FROM transaksi WHERE status = "PAID"')->row_array();
+		$data['transaksi'] = $this->M_admin->select_query('SELECT sum(amount_received) as total_transaksi FROM transaksi WHERE status = "PAID" AND delete_at IS NULL')->row_array();
 		
-		$data['transaksi_terakhir'] = $this->M_admin->select_query('SELECT * FROM transaksi WHERE status = "PAID" ORDER BY create_at DESC limit 1')->row_array();
+		$data['transaksi_terakhir'] = $this->M_admin->select_query('SELECT * FROM transaksi WHERE status = "PAID" AND delete_at IS NULL ORDER BY create_at DESC limit 1')->row_array();
 
 		$mount_now = date('m');
 		$int_mount_now = (int)$mount_now;
