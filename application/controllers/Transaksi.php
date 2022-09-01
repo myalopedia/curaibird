@@ -75,6 +75,12 @@ class Transaksi extends CI_Controller {
 		$barang = [];
 		$barang_database = [];
 
+		if($post['email_pembeli'] == null || $post['email_pembeli'] == '') {
+			$email = 'xxx@gmail.com';
+		} else {
+			$email = $post['email_pembeli'];
+		}
+
 		foreach ($post['nama_barang'] as $key => $value) {
 			$cek_database_barang = $this->M_admin->select_query("SELECT * FROM produk WHERE nama LIKE '%".$value."%'")->row_array();
 			if($cek_database_barang != null) {
@@ -132,7 +138,7 @@ class Transaksi extends CI_Controller {
 			'merchant_ref'   => $merchantRef,
 			'amount'         => $amount,
 			'customer_name'  => $post['pembeli'],
-			'customer_email' => $post['email_pembeli'] ? $post['email_pembeli'] : 'xxx@gmail.com',
+			'customer_email' => $email,
 			// 'order_items'    => [
 			//     [
 			//         'sku'         => 'FB-06',
