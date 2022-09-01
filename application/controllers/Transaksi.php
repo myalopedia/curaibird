@@ -50,6 +50,9 @@ class Transaksi extends CI_Controller {
 		$get_transaksi_tripay = $this->tripay->detailTrasnaksi($data['transaksi']['reference']);
 
 		$decode_transaksi_tripay = json_decode($get_transaksi_tripay);
+		echo "<pre>";
+		print_r($decode_transaksi_tripay);
+		echo "</pre>";
 
 		if($decode_transaksi_tripay) {
 			$data['transaksi_tripay'] = $decode_transaksi_tripay->data;
