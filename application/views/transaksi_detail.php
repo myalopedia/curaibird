@@ -56,6 +56,7 @@
                                             <div class="modal-body">
                                                 <div class="container col-12">
                                                     <div id="accordion-one" class="accordion accordion-primary">
+                                                        <?php if($transaksi_tripay != null) { ?>
                                                         <?php foreach ($transaksi_tripay->instructions as $key => $value) { ?>
                                                         <div class="accordion__item">
                                                             <div class="accordion__header rounded-lg collapsed" data-toggle="collapse" data-target="#default_collapse_<?php echo $key; ?>" aria-expanded="false">
@@ -80,6 +81,7 @@
                                                             </div>
                                                         </div>
                                                         <?php 
+                                                        }
                                                         }
                                                         ?>
                                                     </div>
