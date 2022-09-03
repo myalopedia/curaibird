@@ -290,7 +290,7 @@ class Transaksi extends CI_Controller {
     }
 	function delete_transaksi($id) {
 		$date = date('Y-m-d H:i:s');
-		$this->M_admin->update_data('transaksi', array('delete_at' => $date), array('id' => $id));
+		$this->M_admin->update_data('transaksi_xendit', array('delete_at' => $date), array('id' => $id));
 
 		redirect(base_url('transaksi'));
 	}
