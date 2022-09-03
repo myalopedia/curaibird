@@ -176,7 +176,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="https://tripay.co.id/member/withdraw" target="_blank" class="ai-icon" aria-expanded="false"><i class="flaticon-381-settings-2"></i><span class="nav-text">Penarikan</span>
+                        <a href="https://dashboard.xendit.co/balance" target="_blank" class="ai-icon" aria-expanded="false"><i class="flaticon-381-settings-2"></i><span class="nav-text">Penarikan</span>
                         </a>
                     </li>
                 </ul>
