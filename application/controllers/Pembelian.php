@@ -24,8 +24,8 @@ class Pembelian extends CI_Controller {
 
         $this->load->model('M_admin');
 
-		// Xendit::setApiKey('xnd_development_qrQTQB4rtO5eB0bEx8Lvmq10cYmkkd6Qa2dpnUcuHhRErAyHE8Pf4hYvaQ7vy5fL');
-		Xendit::setApiKey('xnd_production_nkiWkvu5ozcX04Qrx6X1W1Dk0teEPJNhI9rP8qfwx2Cg30cCmKB28k3vrjAz');
+		Xendit::setApiKey('xnd_development_qrQTQB4rtO5eB0bEx8Lvmq10cYmkkd6Qa2dpnUcuHhRErAyHE8Pf4hYvaQ7vy5fL');
+		// Xendit::setApiKey('xnd_production_nkiWkvu5ozcX04Qrx6X1W1Dk0teEPJNhI9rP8qfwx2Cg30cCmKB28k3vrjAz');
     }
 	public function pembelian($id)
 	{

@@ -28,8 +28,8 @@ class Transaksi extends CI_Controller {
 		
         $this->load->model('M_admin');
 
-		// Xendit::setApiKey('xnd_development_qrQTQB4rtO5eB0bEx8Lvmq10cYmkkd6Qa2dpnUcuHhRErAyHE8Pf4hYvaQ7vy5fL');
-		Xendit::setApiKey('xnd_production_nkiWkvu5ozcX04Qrx6X1W1Dk0teEPJNhI9rP8qfwx2Cg30cCmKB28k3vrjAz');
+		Xendit::setApiKey('xnd_development_qrQTQB4rtO5eB0bEx8Lvmq10cYmkkd6Qa2dpnUcuHhRErAyHE8Pf4hYvaQ7vy5fL');
+		// Xendit::setApiKey('xnd_production_nkiWkvu5ozcX04Qrx6X1W1Dk0teEPJNhI9rP8qfwx2Cg30cCmKB28k3vrjAz');
 		$this->load->library('tripay');
 		// $this->load->library('xenditLib');
     }
@@ -142,35 +142,98 @@ class Transaksi extends CI_Controller {
 			array_push($barang_database, $data_barang_post_database);
 		}
 
-		if($post['metode_pembayaran'] == 'BCA') {
-			$params = [ 
-				"external_id" 		=> "va-".date('YmdHis'),
-				"bank_code" 		=> $post['metode_pembayaran'],
-				"name" 				=> $post['pembeli'],
-				"is_single_use" 	=> true,
-				"is_closed"			=> true,
-				"expected_amount"	=> $amount,
-				"suggested_amount" 	=> $amount
-			];
-		} else if ($post['metode_pembayaran'] == 'PERMATA') {
-			$params = [ 
-				"external_id" 		=> "va-".date('YmdHis'),
-				"bank_code" 		=> $post['metode_pembayaran'],
-				"name" 				=> $post['pembeli'],
-				"is_single_use" 	=> true,
-				"expected_amount"	=> $amount,
-			];
-		} else {
-			$params = [ 
-				"external_id" 		=> "va-".date('YmdHis'),
-				"bank_code" 		=> $post['metode_pembayaran'],
-				"name" 				=> $post['pembeli'],
-				"is_single_use" 	=> true,
-				"is_closed"			=> true,
-				"expected_amount"	=> $amount,
-				"suggested_amount" 	=> $amount,
-				"description"		=> $nama_barang_description
-			];
+		switch ($post['metode_pembayaran']) {
+			case 'BCA' :
+				$params = [ 
+					"external_id" 		=> "va-".date('YmdHis'),
+					"bank_code" 		=> $post['metode_pembayaran'],
+					"name" 				=> $post['pembeli'],
+					"is_single_use" 	=> true,
+					"is_closed"			=> true,
+					"expected_amount"	=> $amount,
+					"suggested_amount" 	=> $amount
+				];
+				break;
+			case 'PERMATA' :
+				$params = [ 
+					"external_id" 		=> "va-".date('YmdHis'),
+					"bank_code" 		=> $post['metode_pembayaran'],
+					"name" 				=> $post['pembeli'],
+					"is_single_use" 	=> true,
+					"expected_amount"	=> $amount,
+				];
+				break;
+			case 'BNI':
+				$params = [ 
+					"external_id" 		=> "va-".date('YmdHis'),
+					"bank_code" 		=> $post['metode_pembayaran'],
+					"name" 				=> $post['pembeli'],
+					"is_single_use" 	=> true,
+					"is_closed"			=> true,
+					"expected_amount"	=> $amount,
+				];
+				break;
+			case 'MANDIRI':
+				$params = [ 
+					"external_id" 		=> "va-".date('YmdHis'),
+					"bank_code" 		=> $post['metode_pembayaran'],
+					"name" 				=> $post['pembeli'],
+					"is_single_use" 	=> true,
+					"is_closed"			=> true,
+					"expected_amount"	=> $amount,
+				];
+				break;
+			case 'SAHABAT_SAMPOERNA':
+				$params = [ 
+					"external_id" 		=> "va-".date('YmdHis'),
+					"bank_code" 		=> $post['metode_pembayaran'],
+					"name" 				=> $post['pembeli'],
+					"is_single_use" 	=> true,
+					"is_closed"			=> true,
+					"expected_amount"	=> $amount,
+				];
+				break;
+			case 'CIMB':
+				$params = [ 
+					"external_id" 		=> "va-".date('YmdHis'),
+					"bank_code" 		=> $post['metode_pembayaran'],
+					"name" 				=> $post['pembeli'],
+					"is_single_use" 	=> true,
+					"is_closed"			=> true,
+					"expected_amount"	=> $amount,
+				];
+				break;
+			case 'BSI':
+				$params = [ 
+					"external_id" 		=> "va-".date('YmdHis'),
+					"bank_code" 		=> $post['metode_pembayaran'],
+					"name" 				=> $post['pembeli'],
+					"is_single_use" 	=> true,
+					"is_closed"			=> true,
+					"expected_amount"	=> $amount,
+				];
+				break;
+			case 'DBS':
+				$params = [ 
+					"external_id" 		=> "va-".date('YmdHis'),
+					"bank_code" 		=> $post['metode_pembayaran'],
+					"is_single_use" 	=> true,
+					"is_closed"			=> true,
+					"expected_amount"	=> $amount,
+				];
+				break;
+			default:
+				$params = [ 
+					"external_id" 		=> "va-".date('YmdHis'),
+					"bank_code" 		=> $post['metode_pembayaran'],
+					"name" 				=> $post['pembeli'],
+					"is_single_use" 	=> true,
+					"is_closed"			=> true,
+					"expected_amount"	=> $amount,
+					"suggested_amount" 	=> $amount,
+					"description"		=> $nama_barang_description
+				];
+				break;
 		}
 
 		echo "<pre>";
@@ -195,13 +258,13 @@ class Transaksi extends CI_Controller {
 				'currency' => $createVA['currency'],
 				'is_single_use' => $createVA['is_single_use'],
 				'is_closed' => $createVA['is_closed'],
-				'expected_amount' => $createVA['expected_amount'] ? $createVA['expected_amount'] : '',
-				'suggested_amount' => $createVA['suggested_amount'] ? $createVA['suggested_amount'] : '',
+				'expected_amount' => isset($createVA['expected_amount']) ? $createVA['expected_amount'] : NULL,
+				'suggested_amount' => isset($createVA['suggested_amount']) ? $createVA['suggested_amount'] : NULL,
 				'expiration_date' => $createVA['expiration_date'],
-				'description' => $createVA['description'] ? $createVA['description'] : '',
+				'description' => isset($createVA['description']) ? $createVA['description'] : '',
 				'status' => $createVA['status'],
 				'data_xendit' => $data_xendit,
-				'pading_at' => date('Y-m-d H:i:s'),
+				'pending_at' => date('Y-m-d H:i:s'),
 				'create_at' => date('Y-m-d H:i:s'),
 				'update_at' => date('Y-m-d H:i:s')
 			);
