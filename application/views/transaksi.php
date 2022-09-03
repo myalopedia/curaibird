@@ -36,23 +36,20 @@
                                                     <tr>
                                                         <td><?php echo $key+1; ?></td>
                                                         <td><?php echo date('d-m-Y', strtotime($a['create_at'])); ?></td>
-                                                        <td><?php echo $a['customer_name']; ?></td>
-                                                        <td><?php echo $a['payment_name']; ?></td>
-                                                        <td><?php echo 'Rp.'.number_format($a['amount_received']); ?></td>
+                                                        <td><?php echo $a['name']; ?></td>
+                                                        <td><?php echo $a['bank_code']; ?></td>
+                                                        <td><?php echo 'Rp.'.number_format($a['expected_amount']); ?></td>
                                                         <td>
                                                             <?php
                                                             switch ($a['status']) {
-                                                                case 'UNPAID':
-                                                                    echo '<span class="badge light badge-warning">Unpaid</span>';
+                                                                case 'PROSES':
+                                                                    echo '<span class="badge light badge-warning">Proses</span>';
                                                                     break;
-                                                                case 'PAID':
-                                                                    echo '<span class="badge light badge-success">Paid</span>';
+                                                                case 'INACTIVE':
+                                                                    echo '<span class="badge light badge-success">Paid / Tidak Aktif</span>';
                                                                     break;
-                                                                case 'CANCEL':
-                                                                    echo '<span class="badge light badge-danger">Cancel</span>';
-                                                                    break;
-                                                                default:
-                                                                    echo '<span class="badge light badge-danger">Cancel</span>';
+                                                                case 'ACTIVE':
+                                                                    echo '<span class="badge light badge-danger">Active</span>';
                                                                     break;
                                                             }
                                                             ?>

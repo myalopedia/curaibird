@@ -23,7 +23,7 @@
                                 <div class="row mb-5">
                                     <div class="col-md-6 col-sm-6">
                                         <h6>Customer:</h6>
-                                        <div> <strong><?php echo $transaksi['customer_name']; ?></strong> </div>
+                                        <div> <strong><?php echo $transaksi['name']; ?></strong> </div>
                                     </div>
                                     <div class="mt-4 col-md-6 col-sm-6">
                                         <div class="row">
@@ -32,19 +32,19 @@
                                                     <img class="logo-abbr mr-2" src="<?php echo base_url(); ?>assets/images/logo.png" alt="">
                                                     <img class="logo-compact" src="<?php echo base_url(); ?>assets/images/logo-text.png" alt="">
                                                 </div>
-                                                <span>Metode Pembayaran:  
+                                                <span>Virtual Account:  
                                                     <button type="button" class="badge light badge-success" data-toggle="modal" data-target="#modalGrid" data-toggle="tooltip" data-placement="top" title="Cara Pembayaran">i</button>
-                                                    <strong class="d-block"><?php echo $transaksi['payment_name']; ?></strong>
-                                                    <?php if($transaksi['pay_code']) { ?><strong><?php echo $transaksi['pay_code']; ?></strong><button type="button" class="badge light badge-info" onclick="copyPayCode()" id="toastr-info-top-right" data-toggle="tooltip" data-placement="top" title="Link untuk portal pembayaran"><i class="flaticon-381-link"></i></button> <?php } ?>
+                                                    <strong class="d-block"><?php echo $transaksi['bank_code']; ?></strong>
+                                                    <?php if($transaksi['account_number']) { ?><strong><?php echo $transaksi['account_number']; ?></strong> <?php } ?>
                                                 </span>
                                                 <br>
-                                                <small class="text-muted">Expired <?php echo date('d-m-Y H:i:s', $transaksi['expired_time']);?></small><br />
+                                                <small class="text-muted">Expired <?php echo date('d-m-Y H:i:s', strtotime($transaksi['expiration_date']));?></small><br />
                                                 <small class="text-muted">Link Customer </strong><button type="button" class="badge light badge-info" onclick="copyLink()" id="toastr-info-top-right" data-toggle="tooltip" data-placement="top" title="Link untuk portal pembayaran"><i class="flaticon-381-link"></i></button></small>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="modal fade" id="modalGrid">
+                                <!-- <div class="modal fade" id="modalGrid">
                                     <div class="modal-dialog modal-lg" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -92,7 +92,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="table-responsive p-3">
                                     <table class="table table-striped">
                                         <thead>
@@ -130,15 +130,15 @@
                                             <tbody>
                                                 <tr>
                                                     <td class="left"><strong>Subtotal</strong></td>
-                                                    <td class="right clearfix">Rp. <span class="float-right"><?php echo number_format($sub_total); ?></span></td>
+                                                    <td class="right clearfix">Rp. <span class="float-right"><?php echo number_format($transaksi['expected_amount']-4995); ?></span></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="left"><strong>Admin</strong></td>
-                                                    <td class="right clearfix">Rp. <span class="float-right"><?php echo number_format($transaksi['fee_customer']); ?></span></td>
+                                                    <td class="right clearfix">Rp. <span class="float-right">4.995</span></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="left"><strong>Total</strong></td>
-                                                    <td class="right clearfix">Rp. <span class="float-right"><?php echo number_format($sub_total+$transaksi['fee_customer']); ?></span></td>
+                                                    <td class="right clearfix">Rp. <span class="float-right"><?php echo number_format($transaksi['expected_amount']); ?></span></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -155,15 +155,15 @@
         ***********************************-->
         <script>
             <?php 
-            $trasnaksi_id = $transaksi['id'];
-            $paycode = $transaksi['pay_code'];
+            $transaksi_id = $transaksi['id'];
+            $paycode = $transaksi['account_number'];
             ?>
         function copyLink() {
             /* Copy the text inside the text field */
-            navigator.clipboard.writeText('<?php echo base_url(); ?>pembelian/pembelian/<?php echo $trasnaksi_id; ?>');
+            navigator.clipboard.writeText('<?php echo base_url(); ?>pembelian/pembelian/<?php echo $transaksi_id; ?>');
 
             /* Alert the copied text */
-            alert("Copied the text: " + copyText.value);
+            alert("Copied the text");
         }
         function copyPayCode() {
             /* Copy the text inside the text field */

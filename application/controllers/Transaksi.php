@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+use Xendit\Xendit;
 class Transaksi extends CI_Controller {
 
 	/**
@@ -26,19 +27,30 @@ class Transaksi extends CI_Controller {
 		}
 		
         $this->load->model('M_admin');
+
+		// Xendit::setApiKey('xnd_development_qrQTQB4rtO5eB0bEx8Lvmq10cYmkkd6Qa2dpnUcuHhRErAyHE8Pf4hYvaQ7vy5fL');
+		Xendit::setApiKey('xnd_production_nkiWkvu5ozcX04Qrx6X1W1Dk0teEPJNhI9rP8qfwx2Cg30cCmKB28k3vrjAz');
 		$this->load->library('tripay');
+		// $this->load->library('xenditLib');
     }
 	public function index()
 	{
-		$data['transaksi'] = $this->M_admin->select_select_where_orderBy('*', 'transaksi', array('delete_at' => null), 'create_at DESC')->result_array();
+		$data['transaksi'] = $this->M_admin->select_select_where_orderBy('*', 'transaksi_xendit', array('delete_at' => null), 'create_at DESC')->result_array();
+		
+		// echo "<pre>";
+		// print_r($data['transaksi']);
+		// echo "</pre>";
 
         $this->load->view('layouts/header');
 		$this->load->view('transaksi', $data);
         $this->load->view('layouts/footer');
 	}
     public function tambah() {
-		$daftar_metode = $this->tripay->get_daftar_metode(false);
-		$data['daftar_metode'] = json_decode($daftar_metode)->data;
+		$data['daftar_metode'] = \Xendit\VirtualAccounts::getVABanks();
+
+		// echo "<pre>";
+		// print_r($data['daftar_metode']);
+		// echo "</pre>";
 
 		$footer = array('page' => 'tambah_transaksi');
         $this->load->view('layouts/header');
@@ -53,18 +65,15 @@ class Transaksi extends CI_Controller {
 		echo "<pre>";
     }
 	public function detail($id) {
-		$data['transaksi'] = $this->M_admin->select_where('transaksi', array('id' => $id))->row_array();
-		$get_transaksi_tripay = $this->tripay->detailTrasnaksi($data['transaksi']['reference']);
+		$data['transaksi'] = $this->M_admin->select_where('transaksi_xendit', array('id' => $id))->row_array();
+		$id = $data['transaksi']['xendit_id'];
+		$get_transaksi_tripay = \Xendit\VirtualAccounts::retrieve($id);
 
-		$decode_transaksi_tripay = json_decode($get_transaksi_tripay);
-
-		if($decode_transaksi_tripay->success) {
-			$data['transaksi_tripay'] = $decode_transaksi_tripay->data;
-		} else {
-			$data['transaksi_tripay'] = null;
-		}
-
-		$data['barang_transaksi'] = $this->M_admin->select_where('produk_transaksi', array('reference_transaksi' => $data['transaksi']['reference']))->result_array();
+		// echo "<pre>";
+		// print_r($get_transaksi_tripay);
+		// echo "<pre>";
+		$data['transaksi_tripay'] = $get_transaksi_tripay;
+		$data['barang_transaksi'] = $this->M_admin->select_where('produk_transaksi', array('reference_transaksi' => $data['transaksi']['xendit_id']))->result_array();
 
 		$this->load->view('layouts/header');
 		$this->load->view('transaksi_detail', $data);
@@ -73,12 +82,12 @@ class Transaksi extends CI_Controller {
 	public function calculate_fee() {
 		$post = $this->input->post();
 
-		echo $this->tripay->calculate_total($post['metode'], $post['amount']);
+		return $post['amount'];
 	}
     public function tambah_aksi() {
         $post= $this->input->post();
 
-		$amount = $post['sub_total_transaksi_input'];
+		$amount = $post['total_transaksi_input'];
 		$barang = [];
 		$barang_database = [];
 
@@ -88,6 +97,7 @@ class Transaksi extends CI_Controller {
 			$email = $post['email_pembeli'];
 		}
 
+		$nama_barang_description = '';
 		foreach ($post['nama_barang'] as $key => $value) {
 			$cek_database_barang = $this->M_admin->select_query("SELECT * FROM produk WHERE nama LIKE '%".$value."%'")->row_array();
 			if($cek_database_barang != null) {
@@ -126,81 +136,72 @@ class Transaksi extends CI_Controller {
 				'harga'       => $post['harga_barang'][$key],
 				'qty'    => $post['qty_barang'][$key]
 			);
+			$nama_barang_description .= $nama_barang.', ';
 
 			array_push($barang, $data_barang_post);
 			array_push($barang_database, $data_barang_post_database);
 		}
 
-		$tripay_authentication = $this->tripay->getAuthentication();
+		if($post['metode_pembayaran'] == 'BCA') {
+			$params = [ 
+				"external_id" 		=> "va-".date('YmdHis'),
+				"bank_code" 		=> $post['metode_pembayaran'],
+				"name" 				=> $post['pembeli'],
+				"is_single_use" 	=> true,
+				"is_closed"			=> true,
+				"expected_amount"	=> $amount,
+				"suggested_amount" 	=> $amount
+			];
+		} else if ($post['metode_pembayaran'] == 'PERMATA') {
+			$params = [ 
+				"external_id" 		=> "va-".date('YmdHis'),
+				"bank_code" 		=> $post['metode_pembayaran'],
+				"name" 				=> $post['pembeli'],
+				"is_single_use" 	=> true,
+				"expected_amount"	=> $amount,
+			];
+		} else {
+			$params = [ 
+				"external_id" 		=> "va-".date('YmdHis'),
+				"bank_code" 		=> $post['metode_pembayaran'],
+				"name" 				=> $post['pembeli'],
+				"is_single_use" 	=> true,
+				"is_closed"			=> true,
+				"expected_amount"	=> $amount,
+				"suggested_amount" 	=> $amount,
+				"description"		=> $nama_barang_description
+			];
+		}
 
-		$apiKey       = $tripay_authentication['apiKey'];
-		$privateKey   = $tripay_authentication['privateKey'];
-		$merchantCode = $tripay_authentication['merchantCode'];
-		$merchantRef  = $tripay_authentication['merchantRef'];
+		echo "<pre>";
+		print_r($params);
+		echo "</pre>";
 
-		$generate_signature = $this->tripay->make_signature($amount);
+		$createVA = \Xendit\VirtualAccounts::create($params);
 
-		$data = [
-			'method'         => $post['metode_pembayaran'],
-			'merchant_ref'   => $merchantRef,
-			'amount'         => $amount,
-			'customer_name'  => $post['pembeli'],
-			'customer_email' => $email,
-			// 'order_items'    => [
-			//     [
-			//         'sku'         => 'FB-06',
-			//         'name'        => 'Nama Produk 1',
-			//         'price'       => 500000,
-			//         'quantity'    => 1
-			//     ],
-			//     [
-			//         'sku'         => 'FB-07',
-			//         'name'        => 'Nama Produk 2',
-			//         'price'       => 500000,
-			//         'quantity'    => 1
-			//     ]
-			// ],
-			'order_items' => $barang,
-			'expired_time' => (time() + (24 * 60 * 60)), // 24 jam
-			'signature'    => $generate_signature
-		];
+		echo "<pre>";
+		print_r($createVA);
+		echo "</pre>";
+		$data_xendit = json_encode($createVA);
 
-		$curl = curl_init();
-
-		curl_setopt_array($curl, [
-			CURLOPT_FRESH_CONNECT  => true,
-			CURLOPT_URL            => 'https://tripay.co.id/api/transaction/create',
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_HEADER         => false,
-			CURLOPT_HTTPHEADER     => ['Authorization: Bearer '.$apiKey],
-			CURLOPT_FAILONERROR    => false,
-			CURLOPT_POST           => true,
-			CURLOPT_POSTFIELDS     => http_build_query($data),
-			CURLOPT_IPRESOLVE      => CURL_IPRESOLVE_V4
-		]);
-
-		$response = curl_exec($curl);
-		$error = curl_error($curl);
-
-		curl_close($curl);
-		// print_r($response);
-		if(empty($error)) {
-			$decode_response = json_decode($response);
-			$data = $decode_response->data;
+		if(!isset($createVA['error_code'])) {
 			$data_database = array(
-				'reference' => $data->reference,
-				'payment_method' => $data->payment_method,
-				'payment_name' => $data->payment_name,
-				'customer_name' => $data->customer_name,
-				'amount' => $data->amount,
-				'fee_merchant' => $data->fee_merchant,
-				'fee_customer' => $data->fee_customer,
-				'total_fee' => $data->total_fee,
-				'amount_received' => $data->amount_received,
-				'pay_code' => $data->pay_code,
-				'status' => $data->status,
-				'expired_time' => $data->expired_time,
-				'data_tripay' => $response,
+				'xendit_id' => $createVA['id'],
+				'external_id' => $createVA['external_id'],
+				'bank_code' => $createVA['bank_code'],
+				'merchant_code' => $createVA['merchant_code'],
+				'account_number' => $createVA['account_number'],
+				'name' => $createVA['name'],
+				'currency' => $createVA['currency'],
+				'is_single_use' => $createVA['is_single_use'],
+				'is_closed' => $createVA['is_closed'],
+				'expected_amount' => $createVA['expected_amount'] ? $createVA['expected_amount'] : '',
+				'suggested_amount' => $createVA['suggested_amount'] ? $createVA['suggested_amount'] : '',
+				'expiration_date' => $createVA['expiration_date'],
+				'description' => $createVA['description'] ? $createVA['description'] : '',
+				'status' => $createVA['status'],
+				'data_xendit' => $data_xendit,
+				'pading_at' => date('Y-m-d H:i:s'),
 				'create_at' => date('Y-m-d H:i:s'),
 				'update_at' => date('Y-m-d H:i:s')
 			);
@@ -208,13 +209,13 @@ class Transaksi extends CI_Controller {
 			$barang_array_database = [];
 			foreach ($barang_database as $a) {
 				$array = $a;
-				$array['reference_transaksi'] = $data->reference;
+				$array['reference_transaksi'] = $createVA['id'];
 				$array['create_at'] = date('Y-m-d H:i:s');
 				$array['update_at'] = date('Y-m-d H:i:s');
 				array_push($barang_array_database, $array);
 			}
 
-			$this->M_admin->insert_data('transaksi', $data_database);
+			$this->M_admin->insert_data('transaksi_xendit', $data_database);
 
 			$this->M_admin->insertBatch('produk_transaksi', $barang_array_database);
 

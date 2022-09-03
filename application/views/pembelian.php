@@ -62,15 +62,15 @@
                                         <tfoot>
                                             <tr>
                                                 <td colspan="4" class="left"><strong>Subtotal</strong></td>
-                                                <td class="right clearfix">Rp. <span class="float-right"><?php echo number_format($sub_total); ?></span></td>
+                                                    <td class="right clearfix">Rp. <span class="float-right"><?php echo number_format($transaksi['expected_amount']-4995); ?></span></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="4" class="left"><strong>Admin</strong></td>
-                                                <td class="right clearfix">Rp. <span class="float-right"><?php echo number_format($transaksi['fee_customer']); ?></span></td>
+                                                    <td class="right clearfix">Rp. <span class="float-right">4.995</span></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="4" class="left"><strong>Total</strong></td>
-                                                <td class="right clearfix">Rp. <span class="float-right"><?php echo number_format($sub_total+$transaksi['fee_customer']); ?></span></td>
+                                                    <td class="right clearfix">Rp. <span class="float-right"><?php echo number_format($transaksi['expected_amount']); ?></span></td>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -82,24 +82,24 @@
                                 <div class="card-body">
                                     <div class="col-12">
                                         <h6>Customer:</h6>
-                                        <div> <strong><?php echo $transaksi['customer_name']; ?></strong> </div>
+                                        <div> <strong><?php echo $transaksi['name']; ?></strong> </div>
                                     </div>
                                     <div class="mt-4 col-12">
                                         <div class="row">
                                             <div class="col-12"> 
                                                 <span>Metode Pembayaran:  
-                                                    <strong class="d-block"><?php echo $transaksi['payment_name']; ?></strong>
-                                                    <strong><?php echo $transaksi['pay_code']; ?></strong>
+                                                    <strong class="d-block"><?php echo $transaksi['bank_code']; ?></strong>
+                                                    <strong><?php echo $transaksi['account_number']; ?></strong>
                                                 </span>
                                                 <br>
-                                                <small class="text-muted">Expired <?php echo date('d-m-Y H:i:s', $transaksi['expired_time']);?></small>
+                                                <!-- <small class="text-muted">Expired <?php echo date('d-m-Y H:i:s', $transaksi['expired_time']);?></small> -->
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-8">
+                        <!-- <div class="col-xl-8">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="modal-header">
@@ -108,7 +108,7 @@
                                     <div class="modal-body m-0 p-0">
                                         <div class="container col-12 p-0">
                                             <div id="accordion-one" class="accordion accordion-primary">
-                                                <?php foreach ($transaksi_tripay->instructions as $key => $value) { ?>
+                                                <?php foreach ($transaksi_xendit->instructions as $key => $value) { ?>
                                                 <div class="accordion__item">
                                                     <div class="accordion__header rounded-lg collapsed" data-toggle="collapse" data-target="#default_collapse_<?php echo $key; ?>" aria-expanded="false">
                                                         <span class="accordion__header--text"><?php echo $value->title; ?></span>
@@ -124,7 +124,7 @@
                                                             <?php if($transaksi['payment_method'] == 'QRIS')
                                                             {
                                                             ?>
-                                                            <img style="mx-auto" style="height: 200px" src="<?php echo $transaksi_tripay->qr_url; ?>"/>
+                                                            <img style="mx-auto" style="height: 200px" src="<?php echo $transaksi_xendit->qr_url; ?>"/>
                                                             <?php
                                                             }
                                                             ?>
@@ -139,7 +139,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

@@ -66,30 +66,14 @@
             var metode_pembayaran = metode_pembayaran_input? metode_pembayaran_input : false;
             var total_fee_admin = 0;
             if(metode_pembayaran) {
-                console.log(metode_pembayaran);
-                var postForm = { //Fetch form data
-                    'metode' : metode_pembayaran_input, //Store name fields value
-                    'amount' : sum_harga
-                };
+                
+                $("#biaya_admin_transaksi").html('Rp. 4.995');
+                total_fee_admin = 4995;
+                var total_transaksi_html = sum_harga+4995;
+                $("#total_transaksi").html('Rp.'+total_transaksi_html.toLocaleString('en-US'));
 
-                $.ajax({ //Process the form using $.ajax()
-                    type      : 'POST', //Method type
-                    url       : '<?php echo base_url(); ?>transaksi/calculate_fee', //Your form processing file URL
-                    data      : postForm, //Forms name
-                    dataType  : 'json',
-                    success   : function(data) {
-                        console.log(data);
-                        if(data.success) {
-                            $("#biaya_admin_transaksi").html('Rp.'+data.data[0].total_fee.customer.toLocaleString('en-US'));
-                            total_fee_admin = data.data[0].total_fee.customer;
-                            var total_transaksi_html = sum_harga+total_fee_admin;
-                            $("#total_transaksi").html('Rp.'+total_transaksi_html.toLocaleString('en-US'));
-
-                            $("#biaya_admin_transaksi_input").val(total_fee_admin);
-                            $("#total_transaksi_input").val(total_transaksi_html);
-                        }
-                    }
-                });     
+                $("#biaya_admin_transaksi_input").val(total_fee_admin);
+                $("#total_transaksi_input").val(total_transaksi_html);
             }
         }
     </script>

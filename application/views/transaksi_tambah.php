@@ -74,9 +74,10 @@
                                                     <label>Metode Pembayaran <span class="text-danger">*</span></label>
                                                     <select id="single-select" name="metode_pembayaran" onchange="calculate()" required>
                                                         <option value="">-- Select Metode Pembayaran --</option>
-                                                        <?php foreach ($daftar_metode as $a) { ?>
-                                                        <option value="<?php echo $a->code; ?>"><?php echo $a->name; ?></option>
-                                                        <?php } ?>
+                                                        <?php foreach ($daftar_metode as $a) { 
+                                                            if($a['is_activated'] == 1) { ?>
+                                                        <option value="<?php echo $a['code']; ?>"><?php echo $a['name'].' - '.$a['is_activated']; ?></option>
+                                                        <?php  } } ?>
                                                     </select>
                                                 </div>
                                                 <input type="hidden" name="sub_total_transaksi_input" id="sub_total_transaksi_input" />
