@@ -29,9 +29,9 @@ class Dashboard extends CI_Controller {
     }
 	public function index()
 	{
-		$data['transaksi'] = $this->M_admin->select_query('SELECT sum(amount_received) as total_transaksi FROM transaksi WHERE status = "PAID" AND delete_at IS NULL')->row_array();
+		$data['transaksi'] = $this->M_admin->select_query('SELECT sum(expected_amount) as total_transaksi FROM transaksi_xendit WHERE status = "PAID" AND delete_at IS NULL')->row_array();
 		
-		$data['transaksi_terakhir'] = $this->M_admin->select_query('SELECT * FROM transaksi WHERE status = "PAID" AND delete_at IS NULL ORDER BY create_at DESC limit 1')->row_array();
+		$data['transaksi_terakhir'] = $this->M_admin->select_query('SELECT * FROM transaksi_xendit WHERE status = "PAID" AND delete_at IS NULL ORDER BY create_at DESC limit 1')->row_array();
 
 		$mount_now = date('m');
 		$int_mount_now = (int)$mount_now;
@@ -40,8 +40,8 @@ class Dashboard extends CI_Controller {
 			$date_select = date('d-m-Y',strtotime("-".$i." months"));
 			$month_select = date('m', strtotime($date_select));
 			$year_select = date('Y', strtotime($date_select));
-			$transaksi_success_perbulan = $this->M_admin->select_query("SELECT sum(amount_received) as total_transaksi FROM transaksi WHERE status = 'PAID' AND MONTH(create_at) = '$month_select' AND YEAR(create_at) = '$year_select' AND delete_at IS NULL")->row_array();
-			$transaksi_fail_perbulan = $this->M_admin->select_query("SELECT sum(amount_received) as total_transaksi FROM transaksi WHERE status != 'PAID' AND MONTH(create_at) = '$month_select' AND YEAR(create_at) = '$year_select' AND delete_at IS NULL")->row_array();
+			$transaksi_success_perbulan = $this->M_admin->select_query("SELECT sum(expected_amount) as total_transaksi FROM transaksi_xendit WHERE status = 'PAID' AND MONTH(create_at) = '$month_select' AND YEAR(create_at) = '$year_select' AND delete_at IS NULL")->row_array();
+			$transaksi_fail_perbulan = $this->M_admin->select_query("SELECT sum(expected_amount) as total_transaksi FROM transaksi_xendit WHERE status != 'PAID' AND MONTH(create_at) = '$month_select' AND YEAR(create_at) = '$year_select' AND delete_at IS NULL")->row_array();
 			$data['transaksi_success_perbulan'][$i] = $transaksi_success_perbulan['total_transaksi']? $transaksi_success_perbulan['total_transaksi'] : 0;
 			$data['transaksi_fail_perbulan'][$i] = $transaksi_fail_perbulan['total_transaksi']? $transaksi_fail_perbulan['total_transaksi'] : 0;
 			$data['transaksi_date'][$i] = $date_select;

@@ -20,7 +20,7 @@
                                         <h2 class="fs-36 text-white mb-sm-4 mb-3">Rp. <?php echo number_format($transaksi['total_transaksi']); ?></h2>
                                         <div class="d-flex align-items-center justify-content-between mb-sm-5 mb-3">
                                             <img src="images/dual-dot.png" alt="" class="dot-img">
-                                            <h4 class="fs-20 text-white mb-0"><?php echo $transaksi_terakhir != null ? $transaksi_terakhir['reference'] : '-'; ?></h4>
+                                            <h4 class="fs-20 text-white mb-0"><?php echo $transaksi_terakhir != null ? $transaksi_terakhir['xendit_id'] : '-'; ?></h4>
                                         </div>
                                         <div class="d-flex">
                                             <div class="mr-5">
@@ -29,7 +29,7 @@
                                             </div>
                                             <div>
                                                 <p class="fs-14 mb-1 op6">Nama</p>
-                                                <span><?php echo $transaksi_terakhir != null ? $transaksi_terakhir['customer_name'] : '-'; ?></span>
+                                                <span><?php echo $transaksi_terakhir != null ? $transaksi_terakhir['name'] : '-'; ?></span>
                                             </div>
                                         </div>
                                     </div>
@@ -38,9 +38,8 @@
                             <div class="col-xl-4 col-lg-6 col-md-5 col-sm-4">
                                 <!-- <div class="card bgl-primary card-body overflow-hidden p-0 d-flex rounded">
                                     <div class="p-0 text-center mt-3">
-                                        <span class="text-black">Limit</span>
-                                        <h3 class="text-black fs-20 mb-0 font-w600">$4,000</h3>
-                                        <small>/$10,000</small>
+                                        <span class="text-black">Saldo</span>
+                                        <h3 class="text-black fs-20 mb-0 font-w600">Rp <?php echo number_format($getBalance['balance']); ?></h3>
                                     </div>
                                     <canvas id="lineChart" height="300" class="mt-auto line-chart-demo"></canvas>
                                 </div>	 -->

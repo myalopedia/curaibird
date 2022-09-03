@@ -42,14 +42,17 @@
                                                         <td>
                                                             <?php
                                                             switch ($a['status']) {
-                                                                case 'PROSES':
-                                                                    echo '<span class="badge light badge-warning">Proses</span>';
+                                                                case 'PENDING':
+                                                                    echo '<span class="badge light badge-warning">Pending</span>';
                                                                     break;
                                                                 case 'INACTIVE':
-                                                                    echo '<span class="badge light badge-success">Paid / Tidak Aktif</span>';
+                                                                    echo '<span class="badge light badge-danger">Tidak Aktif</span>';
                                                                     break;
                                                                 case 'ACTIVE':
-                                                                    echo '<span class="badge light badge-danger">Active</span>';
+                                                                    echo '<span class="badge light badge-warning">Active</span>';
+                                                                    break;                                                                    
+                                                                case 'PAID':
+                                                                    echo '<span class="badge light badge-success">Paid</span>';
                                                                     break;
                                                             }
                                                             ?>
