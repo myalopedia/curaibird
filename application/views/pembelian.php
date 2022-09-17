@@ -99,7 +99,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- <div class="col-xl-8">
+                        <div class="col-xl-8">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="modal-header">
@@ -108,26 +108,19 @@
                                     <div class="modal-body m-0 p-0">
                                         <div class="container col-12 p-0">
                                             <div id="accordion-one" class="accordion accordion-primary">
-                                                <?php foreach ($transaksi_xendit->instructions as $key => $value) { ?>
+                                                <?php foreach ($cara_pembayaran['content'] as $key => $value) { ?>
                                                 <div class="accordion__item">
                                                     <div class="accordion__header rounded-lg collapsed" data-toggle="collapse" data-target="#default_collapse_<?php echo $key; ?>" aria-expanded="false">
-                                                        <span class="accordion__header--text"><?php echo $value->title; ?></span>
+                                                        <span class="accordion__header--text"><?php echo $value['judul']; ?></span>
                                                         <span class="accordion__header--indicator"></span>
                                                     </div>
                                                     <div id="default_collapse_<?php echo $key; ?>" class="accordion__body collapse" data-parent="#accordion-one" style="">
                                                         <div class="accordion__body--text p-0">
                                                             <ul class="list-group list-group-flush">
-                                                                <?php foreach ($value->steps as $key => $valuea) { ?>
+                                                                <?php foreach ($value['step'] as $key => $valuea) { ?>
                                                                 <li class="list-group-item"><?php echo $valuea; ?></li>
                                                                 <?php } ?>
                                                             </ul>
-                                                            <?php if($transaksi['payment_method'] == 'QRIS')
-                                                            {
-                                                            ?>
-                                                            <img style="mx-auto" style="height: 200px" src="<?php echo $transaksi_xendit->qr_url; ?>"/>
-                                                            <?php
-                                                            }
-                                                            ?>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -139,7 +132,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
                 </div>
             </div>
