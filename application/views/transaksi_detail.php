@@ -93,7 +93,7 @@
                                         </div>
                                     </div>
                                 </div> -->
-                                <div class="table-responsive p-3">
+                                <!-- <div class="table-responsive p-3">
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
@@ -122,23 +122,22 @@
                                             ?>
                                         </tbody>
                                     </table>
-                                </div>
+                                </div> -->
                                 <div class="row p-3">
-                                    <div class="col-lg-4 col-sm-5"> </div>
-                                    <div class="col-lg-4 col-sm-5 ml-auto">
+                                    <div class="col-12 ml-auto">
                                         <table class="table table-clear">
                                             <tbody>
                                                 <tr>
                                                     <td class="left"><strong>Subtotal</strong></td>
-                                                    <td class="right clearfix">Rp. <span class="float-right"><?php echo number_format($transaksi['expected_amount']-4995); ?></span></td>
+                                                    <td class="right clearfix">Rp. <?php echo number_format($transaksi['expected_amount']-4995); ?></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="left"><strong>Admin</strong></td>
-                                                    <td class="right clearfix">Rp. <span class="float-right">4.995</span></td>
+                                                    <td class="right clearfix">Rp. 4.995</td>
                                                 </tr>
                                                 <tr>
                                                     <td class="left"><strong>Total</strong></td>
-                                                    <td class="right clearfix">Rp. <span class="float-right"><?php echo number_format($transaksi['expected_amount']); ?></span></td>
+                                                    <td class="right clearfix">Rp. <?php echo number_format($transaksi['expected_amount']); ?></td>
                                                 </tr>
                                             </tbody>
                                         </table>

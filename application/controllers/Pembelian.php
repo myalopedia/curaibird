@@ -25,7 +25,7 @@ class Pembelian extends CI_Controller {
         $this->load->model('M_admin');
 
 		// Xendit::setApiKey('xnd_development_qrQTQB4rtO5eB0bEx8Lvmq10cYmkkd6Qa2dpnUcuHhRErAyHE8Pf4hYvaQ7vy5fL');
-		Xendit::setApiKey('xnd_production_hWLhwOjD8qqIKR6ONa6NGlOcMI6bk3RfKx6t3HPuMvvKxKSlo3vf0KW8NIBNvY');
+		Xendit::setApiKey('xnd_production_VKgAwRomNiUoM8dPDamXPKY4QvI9xl9ATSj68ELzAvCO0OJyeSiIyKcvcjX65U');
     }
 	public function pembelian($id)
 	{
@@ -34,8 +34,6 @@ class Pembelian extends CI_Controller {
 		$get_transaksi_xendit = \Xendit\VirtualAccounts::retrieve($id_xendit);
 
 		$data['transaksi_xendit'] = $get_transaksi_xendit;
-
-		$data['barang_transaksi'] = $this->M_admin->select_where('produk_transaksi', array('reference_transaksi' => $id_xendit))->result_array();
 
 		$cara = $this->cara_pembayaran($data['transaksi']['bank_code'], $data['transaksi']['account_number']);
 

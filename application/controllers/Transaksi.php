@@ -29,7 +29,7 @@ class Transaksi extends CI_Controller {
         $this->load->model('M_admin');
 
 		// Xendit::setApiKey('xnd_development_qrQTQB4rtO5eB0bEx8Lvmq10cYmkkd6Qa2dpnUcuHhRErAyHE8Pf4hYvaQ7vy5fL');
-		Xendit::setApiKey('xnd_production_hWLhwOjD8qqIKR6ONa6NGlOcMI6bk3RfKx6t3HPuMvvKxKSlo3vf0KW8NIBNvY');
+		Xendit::setApiKey('xnd_production_VKgAwRomNiUoM8dPDamXPKY4QvI9xl9ATSj68ELzAvCO0OJyeSiIyKcvcjX65U');
 		$this->load->library('tripay');
 		// $this->load->library('xenditLib');
     }
@@ -73,7 +73,7 @@ class Transaksi extends CI_Controller {
 		// print_r($get_transaksi_tripay);
 		// echo "<pre>";
 		$data['transaksi_tripay'] = $get_transaksi_tripay;
-		$data['barang_transaksi'] = $this->M_admin->select_where('produk_transaksi', array('reference_transaksi' => $data['transaksi']['xendit_id']))->result_array();
+		// $data['barang_transaksi'] = $this->M_admin->select_where('produk_transaksi', array('reference_transaksi' => $data['transaksi']['xendit_id']))->result_array();
 
 		$this->load->view('layouts/header');
 		$this->load->view('transaksi_detail', $data);
@@ -98,49 +98,49 @@ class Transaksi extends CI_Controller {
 		}
 
 		$nama_barang_description = '';
-		foreach ($post['nama_barang'] as $key => $value) {
-			$cek_database_barang = $this->M_admin->select_query("SELECT * FROM produk WHERE nama LIKE '%".$value."%'")->row_array();
-			if($cek_database_barang != null) {
-				$id = $cek_database_barang['id'];
-				$sku = $cek_database_barang['sku'];
-				$nama_barang = $cek_database_barang['nama'];
-			}
-			else {
-				$cek_max_id = $this->M_admin->select_query("SELECT max(id) as id FROM produk")->row_array();
+		// foreach ($post['nama_barang'] as $key => $value) {
+		// 	$cek_database_barang = $this->M_admin->select_query("SELECT * FROM produk WHERE nama LIKE '%".$value."%'")->row_array();
+		// 	if($cek_database_barang != null) {
+		// 		$id = $cek_database_barang['id'];
+		// 		$sku = $cek_database_barang['sku'];
+		// 		$nama_barang = $cek_database_barang['nama'];
+		// 	}
+		// 	else {
+		// 		$cek_max_id = $this->M_admin->select_query("SELECT max(id) as id FROM produk")->row_array();
 
-				if($cek_max_id != null) {
-					$id = $cek_max_id['id']+1;
-					$sku_baru = 'B-'.$id;
-				} else {
-					$id = 1;
-					$sku_baru = 'B-1';
-				}
+		// 		if($cek_max_id != null) {
+		// 			$id = $cek_max_id['id']+1;
+		// 			$sku_baru = 'B-'.$id;
+		// 		} else {
+		// 			$id = 1;
+		// 			$sku_baru = 'B-1';
+		// 		}
 
-				$this->M_admin->insert_data('produk', array('sku' => $sku_baru, 'nama' => $post['nama_barang'][$key]));
+		// 		$this->M_admin->insert_data('produk', array('sku' => $sku_baru, 'nama' => $post['nama_barang'][$key]));
 				
-				$sku = $sku_baru;
-				$nama_barang = $post['nama_barang'][$key];
-			}
+		// 		$sku = $sku_baru;
+		// 		$nama_barang = $post['nama_barang'][$key];
+		// 	}
 
-			$data_barang_post = array(
-				'sku'         => $sku,
-				'name'        => $nama_barang,
-				'price'       => $post['harga_barang'][$key],
-				'quantity'    => $post['qty_barang'][$key]
-			);
+		// 	$data_barang_post = array(
+		// 		'sku'         => $sku,
+		// 		'name'        => $nama_barang,
+		// 		'price'       => $post['harga_barang'][$key],
+		// 		'quantity'    => $post['qty_barang'][$key]
+		// 	);
 
-			$data_barang_post_database = array(
-				'id_produk'   => $id,
-				'sku'         => $sku,
-				'nama'        => $nama_barang,
-				'harga'       => $post['harga_barang'][$key],
-				'qty'    => $post['qty_barang'][$key]
-			);
-			$nama_barang_description .= $nama_barang.', ';
+		// 	$data_barang_post_database = array(
+		// 		'id_produk'   => $id,
+		// 		'sku'         => $sku,
+		// 		'nama'        => $nama_barang,
+		// 		'harga'       => $post['harga_barang'][$key],
+		// 		'qty'    => $post['qty_barang'][$key]
+		// 	);
+		// 	$nama_barang_description .= $nama_barang.', ';
 
-			array_push($barang, $data_barang_post);
-			array_push($barang_database, $data_barang_post_database);
-		}
+		// 	array_push($barang, $data_barang_post);
+		// 	array_push($barang_database, $data_barang_post_database);
+		// }
 
 		switch ($post['metode_pembayaran']) {
 			case 'BCA' :
@@ -231,20 +231,20 @@ class Transaksi extends CI_Controller {
 					"is_closed"			=> true,
 					"expected_amount"	=> $amount,
 					"suggested_amount" 	=> $amount,
-					"description"		=> $nama_barang_description
+					"description"		=> $post['pembeli']
 				];
 				break;
 		}
 
-		echo "<pre>";
-		print_r($params);
-		echo "</pre>";
+		// echo "<pre>";
+		// print_r($params);
+		// echo "</pre>";
 
 		$createVA = \Xendit\VirtualAccounts::create($params);
 
-		echo "<pre>";
-		print_r($createVA);
-		echo "</pre>";
+		// echo "<pre>";
+		// print_r($createVA);
+		// echo "</pre>";
 		$data_xendit = json_encode($createVA);
 
 		if(!isset($createVA['error_code'])) {
@@ -280,7 +280,7 @@ class Transaksi extends CI_Controller {
 
 			$this->M_admin->insert_data('transaksi_xendit', $data_database);
 
-			$this->M_admin->insertBatch('produk_transaksi', $barang_array_database);
+			// $this->M_admin->insertBatch('produk_transaksi', $barang_array_database);
 
 			redirect(base_url('transaksi'));
 		}

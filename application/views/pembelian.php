@@ -33,32 +33,6 @@
                             <div class="card">
                                 <div class="card-body">
                                     <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th class="center">#</th>
-                                                <th>Barang</th>
-                                                <th class="right">Harga</th>
-                                                <th class="center">Qty</th>
-                                                <th class="right">Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            $sub_total = 0;
-                                            foreach ($barang_transaksi as $key => $a) { 
-                                            ?>
-                                            <tr>
-                                                <td class="center"><?php echo $key+1; ?></td>
-                                                <td class="left strong"><?php echo $a['nama']; ?></td>
-                                                <td class="left">Rp. <?php echo number_format($a['harga']); ?></td>
-                                                <td class="center"><?php echo $a['qty']; ?></td>
-                                                <td class="right">Rp. <span class="float-right"><?php echo number_format($a['harga']*$a['qty']); ?></span></td>
-                                            </tr>
-                                            <?php
-                                            $sub_total += $a['harga']*$a['qty']; 
-                                            } 
-                                            ?>
-                                        </tbody>
                                         <tfoot>
                                             <tr>
                                                 <td colspan="4" class="left"><strong>Subtotal</strong></td>

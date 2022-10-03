@@ -44,23 +44,12 @@
     <script>
 
         function calculate() {
-            var sum_harga = 0;
-            $('#list_barang_transaksi_tambah .list_barang').each(function(){
-                var qty_barang_input = this.getElementsByClassName("qty_barang_input")[0].value;
-                var harga_barang_input = this.getElementsByClassName("harga_barang_input")[0].value;
-                
-                var qty_barang = qty_barang_input?qty_barang_input:0
-                var harga_barang = harga_barang_input?harga_barang_input:0
-
-                // console.log(harga_barang_input);
-                var total_harga_barang_input = qty_barang_input*harga_barang_input;
-                this.getElementsByClassName("total_harga_barang_show")[0].value = 'Rp.'+total_harga_barang_input.toLocaleString('en-US');
-                this.getElementsByClassName("total_harga_barang_input")[0].value = total_harga_barang_input;
-
-                sum_harga += qty_barang_input*harga_barang_input;
-            });
+            var sub_harga = $("#subHarga").val();
+            var sum_harga = parseInt(sub_harga);
             $("#sub_total_transaksi").html('Rp.'+sum_harga.toLocaleString('en-US'));
+
             $("#sub_total_transaksi_input").val(sum_harga);
+
 
             var metode_pembayaran_input = $("#input_metode_pembayaran #single-select").val();
             var metode_pembayaran = metode_pembayaran_input? metode_pembayaran_input : false;

@@ -29,10 +29,19 @@
                                                     </datalist>
                                                 </div>
                                                 <div class="form-group">
+                                                    <label>Sub Total Harga (Rp)<span class="text-danger">*</span></label>
+                                                    <div class="input-group mb-2">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text">Rp</div>
+                                                        </div>
+                                                        <input type="number" onkeyup="calculate()" id="subHarga" name="subTotal" class="form-control" placeholder="Harga">
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="form-group">
                                                     <label>Email Pembeli</label>
                                                     <input type="email" class="form-control" name="email_pembeli">
-                                                </div>
-                                                <div class="col-12 m-0 p-0" id="list_barang_transaksi_tambah">
+                                                </div> -->
+                                                <!-- <div class="col-12 m-0 p-0" id="list_barang_transaksi_tambah">
                                                     <div class="row list_barang pt-2 mb-2" style="border: 1px solid #c4c4c4; border-radius: 5px;">
                                                         <div class="form-group col-md">
                                                             <label>Nama Barang <span class="text-danger">*</span></label>
@@ -69,7 +78,7 @@
                                                             <button type="button" onclick="tambah_form_barang(this)" class="btn btn-success btn-xs mt-md-5"><i class="fa fa-plus" aria-hidden="true"></i></button>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> -->
                                                 <div class="form-group" id="input_metode_pembayaran">
                                                     <label>Metode Pembayaran <span class="text-danger">*</span></label>
                                                     <select id="single-select" name="metode_pembayaran" onchange="calculate()" required>
