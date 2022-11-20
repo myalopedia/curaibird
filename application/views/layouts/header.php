@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="csrf-token" content="EOMOCH8vxOZzEqRP2lSDYxwPwPcTHC6uZxKKPQ9t">
-    <title>Curaibird | Dashboard</title>
+    <title>Alopedia Payment | Dashboard</title>
 	
 	<meta name="description" content="Some description for the page"/>
     <!-- Favicon icon -->
@@ -33,9 +33,9 @@
     <div id="main-wrapper">
         <div class="nav-header">
             <a href="index.html" class="brand-logo">
-                <img class="logo-abbr" src="<?php echo base_url(); ?>assets/images/logo.png" alt="">
-                <img class="logo-compact" src="<?php echo base_url(); ?>assets/images/logo-text.png" alt="">
-                <img class="brand-title" src="<?php echo base_url(); ?>assets/images/logo-text.png" alt="">
+                <img class="logo-abbr" src="<?php echo base_url(); ?>assets/images/logo-alopedia-2.png" alt="">
+                <!-- <img class="logo-compact" src="<?php echo base_url(); ?>assets/images/logo-text.png" alt="">
+                <img class="brand-title" src="<?php echo base_url(); ?>assets/images/logo-text.png" alt=""> -->
             </a>
             <div class="nav-control">
                 <div class="hamburger">

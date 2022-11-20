@@ -56,9 +56,9 @@
             var total_fee_admin = 0;
             if(metode_pembayaran) {
                 
-                $("#biaya_admin_transaksi").html('Rp. 4.995');
-                total_fee_admin = 4995;
-                var total_transaksi_html = sum_harga+4995;
+                $("#biaya_admin_transaksi").html('Rp. 0');
+                total_fee_admin = 0;
+                var total_transaksi_html = sum_harga+0;
                 $("#total_transaksi").html('Rp.'+total_transaksi_html.toLocaleString('en-US'));
 
                 $("#biaya_admin_transaksi_input").val(total_fee_admin);

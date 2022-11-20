@@ -25,15 +25,15 @@ class Pembelian extends CI_Controller {
         $this->load->model('M_admin');
 
 		// Xendit::setApiKey('xnd_development_qrQTQB4rtO5eB0bEx8Lvmq10cYmkkd6Qa2dpnUcuHhRErAyHE8Pf4hYvaQ7vy5fL');
-		Xendit::setApiKey('xnd_production_VKgAwRomNiUoM8dPDamXPKY4QvI9xl9ATSj68ELzAvCO0OJyeSiIyKcvcjX65U');
+		// Xendit::setApiKey('xnd_production_VKgAwRomNiUoM8dPDamXPKY4QvI9xl9ATSj68ELzAvCO0OJyeSiIyKcvcjX65U');
     }
 	public function pembelian($id)
 	{
 		$data['transaksi'] = $this->M_admin->select_where('transaksi_xendit', array('id' => $id))->row_array();
 		$id_xendit = $data['transaksi']['xendit_id'];
-		$get_transaksi_xendit = \Xendit\VirtualAccounts::retrieve($id_xendit);
+		// $get_transaksi_xendit = \Xendit\VirtualAccounts::retrieve($id_xendit);
 
-		$data['transaksi_xendit'] = $get_transaksi_xendit;
+		// $data['transaksi_xendit'] = $get_transaksi_xendit;
 
 		$cara = $this->cara_pembayaran($data['transaksi']['bank_code'], $data['transaksi']['account_number']);
 

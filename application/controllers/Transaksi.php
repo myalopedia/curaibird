@@ -19,7 +19,7 @@ class Transaksi extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
-    function __construct() {
+    public function __construct() {
         parent::__construct();
 
 		if($this->session->userdata('status') != 'login_admin') {
@@ -28,8 +28,12 @@ class Transaksi extends CI_Controller {
 		
         $this->load->model('M_admin');
 
+		$this->apiKeyDuitku = "9d017fb7a781ac4f0ce2f9ca03bf4d0d";
+		$this->merchantCode = "DS13568"; 
+
+
 		// Xendit::setApiKey('xnd_development_qrQTQB4rtO5eB0bEx8Lvmq10cYmkkd6Qa2dpnUcuHhRErAyHE8Pf4hYvaQ7vy5fL');
-		Xendit::setApiKey('xnd_production_VKgAwRomNiUoM8dPDamXPKY4QvI9xl9ATSj68ELzAvCO0OJyeSiIyKcvcjX65U');
+		// Xendit::setApiKey('xnd_production_VKgAwRomNiUoM8dPDamXPKY4QvI9xl9ATSj68ELzAvCO0OJyeSiIyKcvcjX65U');
 		$this->load->library('tripay');
 		// $this->load->library('xenditLib');
     }
@@ -46,7 +50,15 @@ class Transaksi extends CI_Controller {
         $this->load->view('layouts/footer');
 	}
     public function tambah() {
-		$data['daftar_metode'] = \Xendit\VirtualAccounts::getVABanks();
+		// $data['daftar_metode'] = \Xendit\VirtualAccounts::getVABanks();
+		$getPaymentMethod = $this->getPaymentMethod();
+		$data['daftar_metode'] = $getPaymentMethod["paymentFee"];
+
+		// $get_transaksi_tripay = \Xendit\VirtualAccounts::retrieve($id);
+
+		// echo "<pre>";
+		// print_r($data['daftar_metode']);
+		// echo "<pre>";
 
 		// echo "<pre>";
 		// print_r($data['daftar_metode']);
@@ -67,12 +79,14 @@ class Transaksi extends CI_Controller {
 	public function detail($id) {
 		$data['transaksi'] = $this->M_admin->select_where('transaksi_xendit', array('id' => $id))->row_array();
 		$id = $data['transaksi']['xendit_id'];
-		$get_transaksi_tripay = \Xendit\VirtualAccounts::retrieve($id);
+		$getPaymentMethod = $this->getPaymentMethod();
+
+		// $get_transaksi_tripay = \Xendit\VirtualAccounts::retrieve($id);
 
 		// echo "<pre>";
-		// print_r($get_transaksi_tripay);
+		// print_r($getPaymentMethod);
 		// echo "<pre>";
-		$data['transaksi_tripay'] = $get_transaksi_tripay;
+		// $data['transaksi_tripay'] = $get_transaksi_tripay;
 		// $data['barang_transaksi'] = $this->M_admin->select_where('produk_transaksi', array('reference_transaksi' => $data['transaksi']['xendit_id']))->result_array();
 
 		$this->load->view('layouts/header');
@@ -84,7 +98,253 @@ class Transaksi extends CI_Controller {
 
 		return $post['amount'];
 	}
-    public function tambah_aksi() {
+
+	function generateRandomString($length = 10) {
+		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$charactersLength = strlen($characters);
+		$randomString = '';
+		for ($i = 0; $i < $length; $i++) {
+			$randomString .= $characters[rand(0, $charactersLength - 1)];
+		}
+		return $randomString;
+	}
+
+	public function getPaymentMethod() {
+		$input = json_decode(file_get_contents("php://input"), true);
+
+		$requestBody = array (
+			'order' => array (
+				"invoice_number" => "INV-12312312-0001",
+        		"amount" => 10000
+			),
+			"virtual_account_info" => array (
+				"billing_type" => "FIX_BILL",
+				"expired_time" => 60,
+				"reusable_status" => false,
+				"info1" => "Merchant Demo Store",
+			),
+			'customer' => array (
+				'name' => 'siti mahmudah',
+        		"email" => "anton@example.com"
+			),
+		);
+
+		$requestId = rand(1, 100000); // Change to UUID or anything that can generate unique value
+		$dateTime = gmdate("Y-m-d H:i:s");
+		$isoDateTime = date(DATE_ISO8601, strtotime($dateTime));
+		$dateTimeFinal = substr($isoDateTime, 0, 19) . "Z";
+		$clientId = "BRN-0238-1665140904819"; // Change with your Client ID
+		$secretKey = "SK-075ro3QSNKaKXE0JYhzI"; // Change with your Secret Key
+
+		$getUrl = 'https://api.doku.com';
+
+		$targetPath = '/bri-virtual-account/v2/payment-code';
+		$url = $getUrl . $targetPath;
+
+		// Generate digest
+		$digestValue = base64_encode(hash('sha256', json_encode($requestBody), true));
+
+		// Prepare signature component
+		$componentSignature = "Client-Id:".$clientId ."\n".
+							"Request-Id:".$requestId . "\n".
+							"Request-Timestamp:".$dateTimeFinal ."\n".
+							"Request-Target:".$targetPath ."\n".
+							"Digest:".$digestValue;
+
+		// Generate signature
+		$signature = base64_encode(hash_hmac('sha256', $componentSignature, $secretKey, true));
+
+		// Execute request
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($requestBody));
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+			'Content-Type: application/json',
+			'Client-Id:' . $clientId,
+			'Request-Id:' . $requestId,
+			'Request-Timestamp:' . $dateTimeFinal,
+			'Signature:' . "HMACSHA256=" . $signature,
+		));
+
+		// Set response json
+		$responseJson = curl_exec($ch);
+		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+		curl_close($ch);
+
+		// Echo the response
+		if (is_string($responseJson) && $httpCode == 200) {
+			echo $responseJson;
+			return json_decode($responseJson, true);
+		} else {
+			echo $responseJson;
+			return null;
+		}
+	}
+	public function tambah_aksi() {
+		$post= $this->input->post();
+		$amount = $post['total_transaksi_input'];
+
+		$merchantCode = $this->merchantCode; // dari duitku
+		// $apiKey = '9d017fb7a781ac4f0ce2f9ca03bf4d0d'; // dari duitku
+		$apiKey =  $this->apiKeyDuitku;
+		$paymentAmount = $amount;
+		$paymentMethod = $post['metode_pembayaran']; // VC = Credit Card
+		$merchantOrderId = time() . ''; // dari merchant, unik
+		$productDetails = 'Jasa Alopedia';
+		$email = $post['pembeli'].'@gmail.com'; // email pelanggan anda
+		$phoneNumber = '087721191226'; // nomor telepon pelanggan anda (opsional)
+		$additionalParam = ''; // opsional
+		$merchantUserInfo = ''; // opsional
+		$customerVaName = $post['pembeli']; // tampilan nama pada tampilan konfirmasi bank
+		$callbackUrl = 'http://example.com/callback'; // url untuk callback
+		$returnUrl = 'http://example.com/return'; // url untuk redirect
+		$expiryPeriod = 10; // atur waktu kadaluarsa dalam hitungan menit
+		$signature = md5($merchantCode . $merchantOrderId . $paymentAmount . $apiKey);
+
+		// Customer Detail
+		$firstName = "John";
+		$lastName = "";
+
+		// Address
+		$alamat = "Jalan Boja - Limbangan";
+		$city = "Kendal";
+		$postalCode = "51381";
+		$countryCode = "ID";
+
+		$address = array(
+			'firstName' => $firstName,
+			'lastName' => $lastName,
+			'address' => $alamat,
+			'city' => $city,
+			'postalCode' => $postalCode,
+			'phone' => $phoneNumber,
+			'countryCode' => $countryCode
+		);
+
+		$customerDetail = array(
+			'firstName' => $firstName,
+			'lastName' => $lastName,
+			'email' => $email,
+			'phoneNumber' => $phoneNumber,
+			'billingAddress' => $address,
+			'shippingAddress' => $address
+		);
+
+
+		$item1 = array(
+			'name' => 'Jasa Alopedia',
+			'price' => $paymentAmount,
+			'quantity' => 1);
+
+		$itemDetails = array(
+			$item1
+		);
+
+		/*Khusus untuk metode pembayaran OL dan SL
+		$accountLink = array (
+			'credentialCode' => '7cXXXXX-XXXX-XXXX-9XXX-944XXXXXXX8',
+			'ovo' => array (
+				'paymentDetails' => array ( 
+					0 => array (
+						'paymentType' => 'CASH',
+						'amount' => 40000,
+					),
+				),
+			),
+			'shopee' => array (
+				'useCoin' => false,
+				'promoId' => '',
+			),
+		);*/
+
+		$params = array(
+			'merchantCode' => $merchantCode,
+			'paymentAmount' => $paymentAmount,
+			'paymentMethod' => $paymentMethod,
+			'merchantOrderId' => $merchantOrderId,
+			'productDetails' => $productDetails,
+			'additionalParam' => $additionalParam,
+			'merchantUserInfo' => $merchantUserInfo,
+			'customerVaName' => $customerVaName,
+			'email' => $email,
+			'phoneNumber' => $phoneNumber,
+			// 'accountLink' => $accountLink,
+			'itemDetails' => $itemDetails,
+			'customerDetail' => $customerDetail,
+			'callbackUrl' => $callbackUrl,
+			'returnUrl' => $returnUrl,
+			'signature' => $signature,
+			'expiryPeriod' => $expiryPeriod
+		);
+
+		$params_string = json_encode($params);
+		//echo $params_string;
+		$url = 'https://sandbox.duitku.com/webapi/api/merchant/v2/inquiry'; // Sandbox
+		// $url = 'https://passport.duitku.com/webapi/api/merchant/v2/inquiry'; // Production
+		$ch = curl_init();
+
+		curl_setopt($ch, CURLOPT_URL, $url); 
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");                                                                     
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $params_string);                                                                  
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);                                                                      
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
+			'Content-Type: application/json',                                                                                
+			'Content-Length: ' . strlen($params_string))                                                                       
+		);   
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+		//execute post
+		$request = curl_exec($ch);
+		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+		if($httpCode == 200)
+		{
+			$result = json_decode($request, true);
+			//header('location: '. $result['paymentUrl']);
+			echo "paymentUrl :". $result['paymentUrl'] . "<br />";
+			echo "merchantCode :". $result['merchantCode'] . "<br />";
+			echo "reference :". $result['reference'] . "<br />";
+			echo "vaNumber :". $result['vaNumber'] . "<br />";
+			echo "amount :". $result['amount'] . "<br />";
+			echo "statusCode :". $result['statusCode'] . "<br />";
+			echo "statusMessage :". $result['statusMessage'] . "<br />";
+
+			$data_database = array(
+				'xendit_id' => $result['reference'],
+				'external_id' => $result['reference'],
+				'bank_code' => $paymentMethod,
+				'merchant_code' => $result['merchantCode'],
+				'account_number' => $result['vaNumber'],
+				'name' =>  $customerVaName,
+				'currency' => 'IDR',
+				'is_single_use' => 0,
+				'is_closed' => 0,
+				'expected_amount' => $result['amount'],
+				'suggested_amount' => $result['amount'],
+				'expiration_date' => $expiryPeriod,
+				'description' => json_encode($itemDetails),
+				'status' => $result['statusCode'],
+				'data_xendit' => json_encode($result),
+				'pending_at' => date('Y-m-d H:i:s'),
+				'create_at' => date('Y-m-d H:i:s'),
+				'update_at' => date('Y-m-d H:i:s')
+			);
+
+			$this->M_admin->insert_data('transaksi_xendit', $data_database);
+
+			redirect(base_url('transaksi'));
+		}
+		else
+		{
+			$request = json_decode($request);
+			$error_message = "Server Error " . $httpCode ." ". $request->Message;
+			echo $error_message;
+		}
+	}
+    public function tambah_aksi_xendit() {
         $post= $this->input->post();
 
 		$amount = $post['total_transaksi_input'];

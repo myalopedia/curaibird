@@ -36,11 +36,11 @@
                                         <tfoot>
                                             <tr>
                                                 <td colspan="4" class="left"><strong>Subtotal</strong></td>
-                                                    <td class="right clearfix">Rp. <span class="float-right"><?php echo number_format($transaksi['expected_amount']-4995); ?></span></td>
+                                                    <td class="right clearfix">Rp. <span class="float-right"><?php echo number_format($transaksi['expected_amount']); ?></span></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="4" class="left"><strong>Admin</strong></td>
-                                                    <td class="right clearfix">Rp. <span class="float-right">4.995</span></td>
+                                                    <td class="right clearfix">Rp. <span class="float-right">0</span></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="4" class="left"><strong>Total</strong></td>
@@ -82,6 +82,7 @@
                                     <div class="modal-body m-0 p-0">
                                         <div class="container col-12 p-0">
                                             <div id="accordion-one" class="accordion accordion-primary">
+                                                <?php if($cara_pembayaran != null) {?>
                                                 <?php foreach ($cara_pembayaran['content'] as $key => $value) { ?>
                                                 <div class="accordion__item">
                                                     <div class="accordion__header rounded-lg collapsed" data-toggle="collapse" data-target="#default_collapse_<?php echo $key; ?>" aria-expanded="false">
@@ -99,6 +100,7 @@
                                                     </div>
                                                 </div>
                                                 <?php 
+                                                }
                                                 }
                                                 ?>
                                             </div>
